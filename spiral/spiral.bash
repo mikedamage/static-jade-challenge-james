@@ -1,19 +1,34 @@
 #!/bin/bash
-
 export dir_script=$( cd "$( dirname "$0" )" && pwd );
 
 dir=`pwd`;
-dir_out="$dir/"'spiral_out';
+dir_out="$dir/spiral_out";
+ignore_list=(spiral spiral_out)
 
 if [[ -d $dir_out ]]
 	then
 		rm -r $dir_out;
 	fi
+
 mkdir $dir_out;
 
-for file in $(ls | grep -v 'spiral' | grep -v 'spiral_out');
-	do
-		cp -r $file $dir_out;
-	done
+files=$(find . -print );
 
-find $dir_out -print0 -type f | xargs -0 $dir_script/spirl.bash
+for file in $files
+do
+	if [[ -d $file ]]
+	then
+		for ignore in $ignore_list
+			do
+				if [[ ! "$file" =~ ^./"$ignore" && ! "$file" == '.' ]]
+				then
+					echo $file
+					mkdir $dir_out/$file;
+				fi
+			done
+	elif [[ -f $file ]]
+	then
+		echo  
+		#$dir_script/spiral.bash $file > $dir_out/$file;
+	fi
+done
