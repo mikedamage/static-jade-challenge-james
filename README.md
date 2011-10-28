@@ -1,2 +1,3 @@
-# Spirl Script
-Friendly static site generator
+# Spiral
+
+Free-form static site generator.
